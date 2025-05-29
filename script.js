@@ -1,3 +1,12 @@
+const numberButtons = document.querySelectorAll('.numberButton');
+const display = document.querySelector('.display');
+const addButton = document.querySelector('.addButton');
+const subtractButton = document.querySelector('.subtractButton');
+const multiplyButton = document.querySelector('.multiplyButton');
+const divideButton = document.querySelector('.divideButton');
+const sumButton = document.querySelector('.sumButton');
+const clearButton = document.querySelector('.clearButton');
+
 function add(a, b) {
   return a + b;
 }
@@ -41,3 +50,5 @@ function operate(firstNumber, operator, secondNumber) {
       break;
   }
 }
+
+
