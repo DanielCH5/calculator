@@ -1,0 +1,17 @@
+.calculator {
+  justify-items: center;
+  align-items: center;
+}
+.buttons {
+  width: 100%;
+}
+
+.buttons button {
+  padding: 20px;
+}
+.display {
+  height: 20px;
+  width: 100%;
+  border: 2px solid black;
+  margin-bottom: 10px;
+}
