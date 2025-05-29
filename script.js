@@ -1,14 +1,15 @@
-const numberButtons = document.querySelectorAll('.numberButton');
-const display = document.querySelector('.display');
-const addButton = document.querySelector('.addButton');
-const subtractButton = document.querySelector('.subtractButton');
-const multiplyButton = document.querySelector('.multiplyButton');
-const divideButton = document.querySelector('.divideButton');
-const sumButton = document.querySelector('.sumButton');
-const clearButton = document.querySelector('.clearButton');
+const numberButtons = document.querySelectorAll(".numberButton");
+const display = document.querySelector(".display");
+const clearButton = document.querySelector(".clearButton");
+const sumButton = document.querySelector(".sumButton");
+const addButton = document.querySelector(".addButton");
+const subtractButton = document.querySelector(".subtractButton");
+const multiplyButton = document.querySelector(".multiplyButton");
+const divideButton = document.querySelector(".divideButton");
 
+let operatorAdded = false;
 function add(a, b) {
-  return a + b;
+  return parseInt(a) + parseInt(b);
 }
 
 function subtract(a, b) {
@@ -27,28 +28,85 @@ let firstNumber;
 let operator;
 let secondNumber;
 
-function operate(firstNumber, operator, secondNumber) {
+function operate(numberOne, operator, numberTwo) {
   switch (operator) {
-    case add:
-      console.log(add(firstNumber, secondNumber));
+    case 'add':
+      display.textContent = add(numberOne, numberTwo);
+      firstNumber = 0;
+      secondNumber = 0;
+      operatorAdded = false;
       break;
 
-    case subtract:
-      console.log(subtract(firstNumber, secondNumber));
+    case 'subtract':
+      display.textContent = subtract(numberOne, numberTwo);
+      firstNumber = 0;
+      secondNumber = 0;
+      operatorAdded = false;
       break;
 
-    case multiply:
-      console.log(multiply(firstNumber, secondNumber));
+    case 'multiply':
+      display.textContent = multiply(numberOne, numberTwo);
+      firstNumber = 0;
+      secondNumber = 0;
+      operatorAdded = false;
       break;
 
-    case divide:
-      console.log(divide(firstNumber, secondNumber));
+    case 'divide':
+      display.textContent = divide(numberOne, numberTwo);
+      firstNumber = 0;
+      secondNumber = 0;
+      operatorAdded = false;
       break;
 
     default:
-      console.log("Please enter the values");
+      display.textContent = 'Please enter a value';æ
       break;
   }
 }
+//Adds event listeners to the number buttons and updates the display
+numberButtons.forEach((numberButton) => {
+  numberButton.addEventListener("click", () => {
+    if (!firstNumber) {
+      display.textContent += numberButton.textContent;
+      firstNumber = display.textContent;
+    } else {
+      if (operatorAdded) {
+        if (!secondNumber) {
+          display.textContent += numberButton.textContent;
+          secondNumber = numberButton.textContent;
+        } else {
+          display.textContent += numberButton.textContent;
+          secondNumber += numberButton.textContent;
+        }
+      } else{
+          display.textContent += numberButton.textContent;
+          firstNumber += numberButton.textContent;
+      }
+    }
+  });
+});
 
+addButton.addEventListener("click", () => {
+  operatorAdded = true;
+  display.textContent += ` ${addButton.textContent} `;
+  operator = 'add';
+});
+subtractButton.addEventListener("click", () => {
+  operatorAdded = true;
+  display.textContent += ` ${subtractButton.textContent} `;
+  operator = 'subtract';
+});
+multiplyButton.addEventListener("click", () => {
+  operatorAdded = true;
+  display.textContent += ` ${multiplyButton.textContent} `;
+  operator = 'multiply';
+});
+divideButton.addEventListener("click", () => {
+  operatorAdded = true;
+  display.textContent += ` ${divideButton.textContent} `;
+  operator = 'divide';
+});
 
+sumButton.addEventListener('click', () =>{
+    operate(firstNumber, operator, secondNumber);
+})
