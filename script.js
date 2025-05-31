@@ -59,7 +59,7 @@ function operate(numberOne, operator, numberTwo) {
       break;
 
     default:
-      display.textContent = 'Please enter a value';æ
+      display.textContent = 'Please enter a value';
       break;
   }
 }
