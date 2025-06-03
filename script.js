@@ -28,6 +28,9 @@ let firstNumber;
 let operator;
 let secondNumber;
 let result;
+let resultDisplayed = false;
+
+
 function operate(numberOne, operator, numberTwo) {
   switch (operator) {
     case 'add':
@@ -66,6 +69,9 @@ function operate(numberOne, operator, numberTwo) {
 }
 //Find out which number was pressed and save it as a variable
 function detectNumber(numberButton) {
+  if(resultDisplayed && !operatorAdded){
+    clearAll();
+  }
   const number = numberButton.textContent;
   //If an operator has been added, we are no longer working with the first number, but instead the second.
   if (operatorAdded && !secondNumber) {
@@ -87,19 +93,20 @@ function detectNumber(numberButton) {
     console.log(`This is #1 x2 ${firstNumber}`);
   }
 }
-
+//Clears display and resets numbers
 function clearAll(){
   display.textContent = "";
   firstNumber = 0;
   secondNumber = 0;
   result = 0;
+  resultDisplayed = false;
 }
+
 numberButtons.forEach((button) => {
   button.addEventListener('click', () => {
     detectNumber(button);
   })
 })
-
 
 addButton.addEventListener("click", () => {
   if(!firstNumber){
@@ -114,6 +121,10 @@ addButton.addEventListener("click", () => {
   operator = 'add';
 });
 subtractButton.addEventListener("click", () => {
+  if(!firstNumber){
+    display.textContent = 'Please enter a number';
+    return;
+  }
   if(operatorAdded){
     firstNumber = operate(firstNumber, operator, secondNumber);
   }
@@ -122,6 +133,10 @@ subtractButton.addEventListener("click", () => {
   operator = 'subtract';
 });
 multiplyButton.addEventListener("click", () => {
+  if(!firstNumber){
+    display.textContent = 'Please enter a number';
+    return;
+  }
   if(operatorAdded){
     firstNumber = operate(firstNumber, operator, secondNumber);
   }
@@ -130,6 +145,10 @@ multiplyButton.addEventListener("click", () => {
   operator = 'multiply';
 });
 divideButton.addEventListener("click", () => {
+  if(!firstNumber){
+    display.textContent = 'Please enter a number';
+    return;
+  }
   if(operatorAdded){
     firstNumber = operate(firstNumber, operator, secondNumber);
   }
@@ -145,9 +164,9 @@ sumButton.addEventListener('click', () => {
     operate(firstNumber, operator, secondNumber);
     display.textContent = result;
     result = 0;
+    resultDisplayed = true;
   }
 })
-//Clears display and resets numbers
 clearButton.addEventListener('click', () => {
   clearAll();
 })
