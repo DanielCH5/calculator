@@ -34,7 +34,7 @@ function operate(numberOne, operator, numberTwo) {
   switch (operator) {
     case "add":
       console.log(numberOne, operator, numberTwo);
-      
+
       result = add(numberOne, numberTwo);
       firstNumber = result;
       secondNumber = undefined;
@@ -116,15 +116,16 @@ addButton.addEventListener("click", () => {
     return;
   }
   if (operatorAdded) {
-    if (result && !secondNumber) {
+    if (secondNumber === undefined && operator === "add") {
       return;
-    } else {
-      if (secondNumber === undefined) {
-        return;
-      }
-      firstNumber = operate(firstNumber, operator, secondNumber);
-      console.log(firstNumber, operator, secondNumber);
+    } else if (secondNumber === undefined && operator !== "add") {
+      let newString = display.textContent.slice(0, -3);
+      display.textContent = newString += ` ${addButton.textContent} `;
+      operator = "add";
+      return;
     }
+    firstNumber = operate(firstNumber, operator, secondNumber);
+    console.log(firstNumber, operator, secondNumber);
   }
   operatorAdded++;
   display.textContent += ` ${addButton.textContent} `;
@@ -132,11 +133,21 @@ addButton.addEventListener("click", () => {
 });
 subtractButton.addEventListener("click", () => {
   if (!firstNumber) {
+    clearAll();
     display.textContent = "Please enter a number";
     return;
   }
   if (operatorAdded) {
+    if (secondNumber === undefined && operator === "subtract") {
+      return;
+    } else if (secondNumber === undefined && operator !== "subtract") {
+      let newString = display.textContent.slice(0, -3);
+      display.textContent = newString += ` ${subtractButton.textContent} `;
+      operator = "subtract";
+      return;
+    }
     firstNumber = operate(firstNumber, operator, secondNumber);
+    console.log(firstNumber, operator, secondNumber);
   }
   operatorAdded++;
   display.textContent += ` ${subtractButton.textContent} `;
@@ -144,24 +155,44 @@ subtractButton.addEventListener("click", () => {
 });
 multiplyButton.addEventListener("click", () => {
   if (!firstNumber) {
+    clearAll();
     display.textContent = "Please enter a number";
     return;
   }
   if (operatorAdded) {
-    firstNumber = operate(firstNumber, operator, secondNumber);
-  }
+      if (secondNumber === undefined && operator === "multiply") {
+        return;
+      } else if (secondNumber === undefined && operator !== "multiply") {
+        let newString = display.textContent.slice(0, -3);
+        display.textContent = newString += ` ${multiplyButton.textContent} `;
+        operator = "multiply";
+        return;
+      }
+      firstNumber = operate(firstNumber, operator, secondNumber);
+      console.log(firstNumber, operator, secondNumber);
+    }
   operatorAdded++;
   display.textContent += ` ${multiplyButton.textContent} `;
   operator = "multiply";
 });
 divideButton.addEventListener("click", () => {
   if (!firstNumber) {
+    clearAll();
     display.textContent = "Please enter a number";
     return;
   }
   if (operatorAdded) {
-    firstNumber = operate(firstNumber, operator, secondNumber);
-  }
+      if (secondNumber === undefined && operator === "divide") {
+        return;
+      } else if (secondNumber === undefined && operator !== "divide") {
+        let newString = display.textContent.slice(0, -3);
+        display.textContent = newString += ` ${divideButton.textContent} `;
+        operator = "divide";
+        return;
+      }
+      firstNumber = operate(firstNumber, operator, secondNumber);
+      console.log(firstNumber, operator, secondNumber);
+    }
   operatorAdded++;
   display.textContent += ` ${divideButton.textContent} `;
   operator = "divide";
@@ -172,8 +203,16 @@ sumButton.addEventListener("click", () => {
     clearAll();
     display.textContent = "Please enter some values";
   } else {
+    if(!secondNumber){
+      return;
+    }
     operate(firstNumber, operator, secondNumber);
-    display.textContent = result;
+    let isInt = (result) => result % 1 === 0;
+    if (!isInt(result)) {
+      display.textContent = parseFloat(result).toFixed(2);
+    } else {
+      display.textContent = result;
+    }
     result = 0;
     resultDisplayed = true;
     operatorAdded = 0;
