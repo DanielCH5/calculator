@@ -30,46 +30,46 @@ let secondNumber;
 let result;
 let resultDisplayed = false;
 
-
 function operate(numberOne, operator, numberTwo) {
   switch (operator) {
-    case 'add':
+    case "add":
+      console.log(numberOne, operator, numberTwo);
+      
       result = add(numberOne, numberTwo);
       firstNumber = result;
-      secondNumber = 0;
-      operatorAdded = 0;
+      secondNumber = undefined;
       break;
 
-    case 'subtract':
+    case "subtract":
       result = subtract(numberOne, numberTwo);
       firstNumber = result;
-      secondNumber = 0;
+      secondNumber = undefined;
       operatorAdded = 0;
       break;
 
-    case 'multiply':
+    case "multiply":
       result = multiply(numberOne, numberTwo);
       firstNumber = result;
-      secondNumber = 0;
+      secondNumber = undefined;
       operatorAdded = 0;
       break;
 
-    case 'divide':
+    case "divide":
       result = divide(numberOne, numberTwo);
       firstNumber = result;
-      secondNumber = 0;
+      secondNumber = undefined;
       operatorAdded = 0;
       break;
 
     default:
-      display.textContent = 'Please enter a value';
+      display.textContent = "Please enter a value";
       break;
   }
   return result;
 }
 //Find out which number was pressed and save it as a variable
 function detectNumber(numberButton) {
-  if(resultDisplayed && !operatorAdded){
+  if (resultDisplayed && !operatorAdded) {
     clearAll();
   }
   const number = numberButton.textContent;
@@ -77,96 +77,108 @@ function detectNumber(numberButton) {
   if (operatorAdded && !secondNumber) {
     secondNumber = number;
     display.textContent += number;
-    console.log(`This is #2 ${secondNumber}`)
-  } else if (operatorAdded && secondNumber){
+    console.log(`This is #2 ${secondNumber}`);
+  } else if (operatorAdded && secondNumber) {
     secondNumber += number;
     display.textContent += number;
-    console.log(`This is #2 ${secondNumber}`)
+    console.log(`This is #2 ${secondNumber}`);
   }
   if (!operatorAdded && !firstNumber) {
     firstNumber = number;
     console.log(`This is #1 ${firstNumber}`);
     display.textContent = firstNumber;
-  } else if (!operatorAdded && !secondNumber){
+  } else if (!operatorAdded && !secondNumber) {
     firstNumber += number;
     display.textContent += number;
     console.log(`This is #1 x2 ${firstNumber}`);
   }
 }
 //Clears display and resets numbers
-function clearAll(){
+function clearAll() {
   display.textContent = "";
   firstNumber = 0;
-  secondNumber = 0;
+  secondNumber = undefined;
   result = 0;
   resultDisplayed = false;
+  operatorAdded = 0;
 }
 
 numberButtons.forEach((button) => {
-  button.addEventListener('click', () => {
+  button.addEventListener("click", () => {
     detectNumber(button);
-  })
-})
+  });
+});
 
 addButton.addEventListener("click", () => {
-  if(!firstNumber){
-    display.textContent = 'Please enter a number';
+  if (!firstNumber) {
+    clearAll();
+    display.textContent = "Please enter a number";
     return;
   }
-  if(operatorAdded){
-    firstNumber = operate(firstNumber, operator, secondNumber);
+  if (operatorAdded) {
+    if (result && !secondNumber) {
+      return;
+    } else {
+      if (secondNumber === undefined) {
+        return;
+      }
+      firstNumber = operate(firstNumber, operator, secondNumber);
+      console.log(firstNumber, operator, secondNumber);
+    }
   }
   operatorAdded++;
   display.textContent += ` ${addButton.textContent} `;
-  operator = 'add';
+  operator = "add";
 });
 subtractButton.addEventListener("click", () => {
-  if(!firstNumber){
-    display.textContent = 'Please enter a number';
+  if (!firstNumber) {
+    display.textContent = "Please enter a number";
     return;
   }
-  if(operatorAdded){
+  if (operatorAdded) {
     firstNumber = operate(firstNumber, operator, secondNumber);
   }
   operatorAdded++;
   display.textContent += ` ${subtractButton.textContent} `;
-  operator = 'subtract';
+  operator = "subtract";
 });
 multiplyButton.addEventListener("click", () => {
-  if(!firstNumber){
-    display.textContent = 'Please enter a number';
+  if (!firstNumber) {
+    display.textContent = "Please enter a number";
     return;
   }
-  if(operatorAdded){
+  if (operatorAdded) {
     firstNumber = operate(firstNumber, operator, secondNumber);
   }
   operatorAdded++;
   display.textContent += ` ${multiplyButton.textContent} `;
-  operator = 'multiply';
+  operator = "multiply";
 });
 divideButton.addEventListener("click", () => {
-  if(!firstNumber){
-    display.textContent = 'Please enter a number';
+  if (!firstNumber) {
+    display.textContent = "Please enter a number";
     return;
   }
-  if(operatorAdded){
+  if (operatorAdded) {
     firstNumber = operate(firstNumber, operator, secondNumber);
   }
   operatorAdded++;
   display.textContent += ` ${divideButton.textContent} `;
-  operator = 'divide';
+  operator = "divide";
 });
 
-sumButton.addEventListener('click', () => {
-  if(!firstNumber && !secondNumber){
-    display.textContent = 'Please enter some values';
+sumButton.addEventListener("click", () => {
+  if (!firstNumber && !secondNumber) {
+    clearAll();
+    display.textContent = "Please enter some values";
   } else {
     operate(firstNumber, operator, secondNumber);
     display.textContent = result;
     result = 0;
     resultDisplayed = true;
+    operatorAdded = 0;
   }
-})
-clearButton.addEventListener('click', () => {
+});
+clearButton.addEventListener("click", () => {
   clearAll();
-})
+});
