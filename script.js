@@ -21,7 +21,11 @@ function multiply(a, b) {
 }
 
 function divide(a, b) {
-  return a / b;
+  if(a == 0 || b == 0){
+    return 'naughty'
+  } else {
+    return a / b;
+  }
 }
 
 let firstNumber;
@@ -31,6 +35,10 @@ let result;
 let resultDisplayed = false;
 
 function operate(numberOne, operator, numberTwo) {
+  //Checks for division with 0
+  if (result === 'naughty'){
+    return;
+  }
   switch (operator) {
     case "add":
       console.log(numberOne, operator, numberTwo);
@@ -209,7 +217,13 @@ sumButton.addEventListener("click", () => {
     operate(firstNumber, operator, secondNumber);
     let isInt = (result) => result % 1 === 0;
     if (!isInt(result)) {
+      if (result === "naughty") {
+        clearAll();
+        display.textContent = "Stop dividing by 0.... :)";
+        return;
+      }
       display.textContent = parseFloat(result).toFixed(2);
+      console.log('foo');
     } else {
       display.textContent = result;
     }
