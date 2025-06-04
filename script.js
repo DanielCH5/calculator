@@ -66,7 +66,7 @@ function operate(numberOne, operator, numberTwo) {
 
     case "divide":
       result = divide(numberOne, numberTwo);
-      if(result === 'naughty'){
+      if (result === "naughty") {
         clearAll();
         display.textContent = "Stop dividing by 0";
         console.log(firstNumber, result, secondNumber);
@@ -127,7 +127,6 @@ numberButtons.forEach((button) => {
 });
 
 addButton.addEventListener("click", () => {
- 
   if (!firstNumber) {
     clearAll();
     display.textContent = "Please enter a number";
@@ -144,6 +143,9 @@ addButton.addEventListener("click", () => {
     }
     firstNumber = operate(firstNumber, operator, secondNumber);
     console.log(firstNumber, operator, secondNumber);
+  }
+  if (!firstNumber) {
+    return;
   }
   operatorAdded++;
   display.textContent += ` ${addButton.textContent} `;
@@ -167,6 +169,9 @@ subtractButton.addEventListener("click", () => {
     firstNumber = operate(firstNumber, operator, secondNumber);
     console.log(firstNumber, operator, secondNumber);
   }
+  if (!firstNumber) {
+    return;
+  }
   operatorAdded++;
   display.textContent += ` ${subtractButton.textContent} `;
   operator = "subtract";
@@ -188,6 +193,9 @@ multiplyButton.addEventListener("click", () => {
     }
     firstNumber = operate(firstNumber, operator, secondNumber);
     console.log(firstNumber, operator, secondNumber);
+  }
+  if (!firstNumber) {
+    return;
   }
   operatorAdded++;
   display.textContent += ` ${multiplyButton.textContent} `;
@@ -211,12 +219,20 @@ divideButton.addEventListener("click", () => {
     firstNumber = operate(firstNumber, operator, secondNumber);
     console.log(firstNumber, operator, secondNumber);
   }
+  if (!firstNumber) {
+    return;
+  }
   operatorAdded++;
   display.textContent += ` ${divideButton.textContent} `;
   operator = "divide";
 });
 
 sumButton.addEventListener("click", () => {
+  if (!result) {
+    clearAll();
+    display.textContent = "You can't divide by 0...";
+    return;
+  }
   if (!firstNumber && !secondNumber) {
     clearAll();
     display.textContent = "Please enter some values";
