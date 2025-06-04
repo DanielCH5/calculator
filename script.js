@@ -21,8 +21,8 @@ function multiply(a, b) {
 }
 
 function divide(a, b) {
-  if(a == 0 || b == 0){
-    return 'naughty'
+  if (a == 0 || b == 0) {
+    return "naughty";
   } else {
     return a / b;
   }
@@ -36,21 +36,22 @@ let resultDisplayed = false;
 
 function operate(numberOne, operator, numberTwo) {
   //Checks for division with 0
-  if (result === 'naughty'){
+  if (result === "naughty") {
     return;
   }
   switch (operator) {
     case "add":
       console.log(numberOne, operator, numberTwo);
-
       result = add(numberOne, numberTwo);
       firstNumber = result;
+      display.textContent = result;
       secondNumber = undefined;
       break;
 
     case "subtract":
       result = subtract(numberOne, numberTwo);
       firstNumber = result;
+      display.textContent = result;
       secondNumber = undefined;
       operatorAdded = 0;
       break;
@@ -58,15 +59,23 @@ function operate(numberOne, operator, numberTwo) {
     case "multiply":
       result = multiply(numberOne, numberTwo);
       firstNumber = result;
+      display.textContent = result;
       secondNumber = undefined;
       operatorAdded = 0;
       break;
 
     case "divide":
       result = divide(numberOne, numberTwo);
-      firstNumber = result;
-      secondNumber = undefined;
-      operatorAdded = 0;
+      if(result === 'naughty'){
+        clearAll();
+        display.textContent = "Stop dividing by 0";
+        console.log(firstNumber, result, secondNumber);
+      } else {
+        firstNumber = result;
+        display.textContent = result;
+        secondNumber = undefined;
+        operatorAdded = 0;
+      }
       break;
 
     default:
@@ -106,7 +115,7 @@ function clearAll() {
   display.textContent = "";
   firstNumber = 0;
   secondNumber = undefined;
-  result = 0;
+  result = undefined;
   resultDisplayed = false;
   operatorAdded = 0;
 }
@@ -118,6 +127,7 @@ numberButtons.forEach((button) => {
 });
 
 addButton.addEventListener("click", () => {
+ 
   if (!firstNumber) {
     clearAll();
     display.textContent = "Please enter a number";
@@ -168,17 +178,17 @@ multiplyButton.addEventListener("click", () => {
     return;
   }
   if (operatorAdded) {
-      if (secondNumber === undefined && operator === "multiply") {
-        return;
-      } else if (secondNumber === undefined && operator !== "multiply") {
-        let newString = display.textContent.slice(0, -3);
-        display.textContent = newString += ` ${multiplyButton.textContent} `;
-        operator = "multiply";
-        return;
-      }
-      firstNumber = operate(firstNumber, operator, secondNumber);
-      console.log(firstNumber, operator, secondNumber);
+    if (secondNumber === undefined && operator === "multiply") {
+      return;
+    } else if (secondNumber === undefined && operator !== "multiply") {
+      let newString = display.textContent.slice(0, -3);
+      display.textContent = newString += ` ${multiplyButton.textContent} `;
+      operator = "multiply";
+      return;
     }
+    firstNumber = operate(firstNumber, operator, secondNumber);
+    console.log(firstNumber, operator, secondNumber);
+  }
   operatorAdded++;
   display.textContent += ` ${multiplyButton.textContent} `;
   operator = "multiply";
@@ -190,17 +200,17 @@ divideButton.addEventListener("click", () => {
     return;
   }
   if (operatorAdded) {
-      if (secondNumber === undefined && operator === "divide") {
-        return;
-      } else if (secondNumber === undefined && operator !== "divide") {
-        let newString = display.textContent.slice(0, -3);
-        display.textContent = newString += ` ${divideButton.textContent} `;
-        operator = "divide";
-        return;
-      }
-      firstNumber = operate(firstNumber, operator, secondNumber);
-      console.log(firstNumber, operator, secondNumber);
+    if (secondNumber === undefined && operator === "divide") {
+      return;
+    } else if (secondNumber === undefined && operator !== "divide") {
+      let newString = display.textContent.slice(0, -3);
+      display.textContent = newString += ` ${divideButton.textContent} `;
+      operator = "divide";
+      return;
     }
+    firstNumber = operate(firstNumber, operator, secondNumber);
+    console.log(firstNumber, operator, secondNumber);
+  }
   operatorAdded++;
   display.textContent += ` ${divideButton.textContent} `;
   operator = "divide";
@@ -211,19 +221,14 @@ sumButton.addEventListener("click", () => {
     clearAll();
     display.textContent = "Please enter some values";
   } else {
-    if(!secondNumber){
+    if (!secondNumber) {
       return;
     }
     operate(firstNumber, operator, secondNumber);
     let isInt = (result) => result % 1 === 0;
     if (!isInt(result)) {
-      if (result === "naughty") {
-        clearAll();
-        display.textContent = "Stop dividing by 0.... :)";
-        return;
-      }
       display.textContent = parseFloat(result).toFixed(2);
-      console.log('foo');
+      console.log("foo");
     } else {
       display.textContent = result;
     }
