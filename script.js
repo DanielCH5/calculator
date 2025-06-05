@@ -6,7 +6,7 @@ const addButton = document.querySelector(".addButton");
 const subtractButton = document.querySelector(".subtractButton");
 const multiplyButton = document.querySelector(".multiplyButton");
 const divideButton = document.querySelector(".divideButton");
-
+const floatButton = document.querySelector('#floatButton');
 let operatorAdded = 0;
 function add(a, b) {
   return Number(a) + Number(b);
@@ -33,7 +33,7 @@ let operator;
 let secondNumber;
 let result;
 let resultDisplayed = false;
-
+let floatAdded = false;
 function operate(numberOne, operator, numberTwo) {
   //Checks for division with 0
   if (result === "naughty") {
@@ -90,25 +90,54 @@ function detectNumber(numberButton) {
     clearAll();
   }
   const number = numberButton.textContent;
+  if (floatAdded === true && number === '.') {
+    return;
+  } else {
+    if (operatorAdded && !secondNumber) {
+      if (number === '.' && !floatAdded) {
+        return;
+      }
+      secondNumber = number;
+      display.textContent += number;
+      console.log(`This is #2 ${secondNumber}`);
+    } else if (operatorAdded && secondNumber) {
+      if (number === '.' && !floatAdded) {
+        floatAdded = true;
+        secondNumber += number;
+        display.textContent += number;
+        console.log(`This is #2 ${secondNumber}`);
+      } else {
+        secondNumber += number;
+        display.textContent += number;
+        console.log(`This is #2 ${secondNumber}`);
+      }
+    }
+    if (!operatorAdded && !firstNumber) { //For the first digit in the display
+      if (number === ".") {
+        clearAll();
+        display.textContent = 'Please enter a NUMBER, not a dot.'
+        return;
+      } else {
+        firstNumber = number;
+        console.log(`This is #1 ${firstNumber}`);
+        display.textContent = firstNumber;
+      }
+    } else if (!operatorAdded && !secondNumber) { //For other digits belonging to the first number
+
+      if (number === '.' && !floatAdded) {
+        floatAdded = true;
+        firstNumber += number;
+        display.textContent += number;
+        console.log(`This is #1 x2 ${firstNumber}`);
+      } else {
+        firstNumber += number;
+        display.textContent += number;
+        console.log(`This is #1 x2 ${firstNumber}`);
+      }
+    }
+  }
   //If an operator has been added, we are no longer working with the first number, but instead the second.
-  if (operatorAdded && !secondNumber) {
-    secondNumber = number;
-    display.textContent += number;
-    console.log(`This is #2 ${secondNumber}`);
-  } else if (operatorAdded && secondNumber) {
-    secondNumber += number;
-    display.textContent += number;
-    console.log(`This is #2 ${secondNumber}`);
-  }
-  if (!operatorAdded && !firstNumber) {
-    firstNumber = number;
-    console.log(`This is #1 ${firstNumber}`);
-    display.textContent = firstNumber;
-  } else if (!operatorAdded && !secondNumber) {
-    firstNumber += number;
-    display.textContent += number;
-    console.log(`This is #1 x2 ${firstNumber}`);
-  }
+
 }
 //Clears display and resets numbers
 function clearAll() {
@@ -118,13 +147,23 @@ function clearAll() {
   result = undefined;
   resultDisplayed = false;
   operatorAdded = 0;
+  floatAdded = false;
 }
+function checkForFloat(result) {
+  const stringedNumber = result.toString();
 
+  return stringedNumber.includes('.') ? true : false;
+}
 numberButtons.forEach((button) => {
   button.addEventListener("click", () => {
     detectNumber(button);
   });
 });
+
+floatButton.addEventListener('click', () => {
+
+});
+
 
 addButton.addEventListener("click", () => {
   if (!firstNumber) {
@@ -148,6 +187,7 @@ addButton.addEventListener("click", () => {
     return;
   }
   operatorAdded++;
+  floatAdded = false; //Removes the floatAdded so it can be added to the second number
   display.textContent += ` ${addButton.textContent} `;
   operator = "add";
 });
@@ -173,6 +213,7 @@ subtractButton.addEventListener("click", () => {
     return;
   }
   operatorAdded++;
+  floatAdded = false; //Removes the floatAdded so it can be added to the second number
   display.textContent += ` ${subtractButton.textContent} `;
   operator = "subtract";
 });
@@ -198,6 +239,7 @@ multiplyButton.addEventListener("click", () => {
     return;
   }
   operatorAdded++;
+  floatAdded = false; //Removes the floatAdded so it can be added to the second number
   display.textContent += ` ${multiplyButton.textContent} `;
   operator = "multiply";
 });
@@ -223,12 +265,17 @@ divideButton.addEventListener("click", () => {
     return;
   }
   operatorAdded++;
+  floatAdded = false; //Removes the floatAdded so it can be added to the second number
   display.textContent += ` ${divideButton.textContent} `;
   operator = "divide";
 });
 
 sumButton.addEventListener("click", () => {
+  if (!secondNumber) {
+    return;
+  }
   operate(firstNumber, operator, secondNumber);
+  console.log(firstNumber, operator, secondNumber, result);
   if (!result) {
     clearAll();
     display.textContent = "You can't divide by 0...";
@@ -238,20 +285,20 @@ sumButton.addEventListener("click", () => {
     clearAll();
     display.textContent = "Please enter some values";
   } else {
-    if (!secondNumber) {
-      return;
-    }
-    
     let isInt = (result) => result % 1 === 0;
     if (!isInt(result)) {
       display.textContent = parseFloat(result).toFixed(2);
       console.log("foo");
+      floatAdded = true;
+
     } else {
       display.textContent = result;
+      floatAdded = false;
     }
     result = 0;
     resultDisplayed = true;
     operatorAdded = 0;
+
   }
 });
 clearButton.addEventListener("click", () => {
