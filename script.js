@@ -322,6 +322,64 @@ window.addEventListener('keydown', (event) => {
     operator = "subtract";
   }
 
+  if (event.key === "*") {
+    if (!firstNumber) {
+      clearAll();
+      display.textContent = "Please enter a number";
+      return;
+    }
+    if (operatorAdded) {
+      if (secondNumber === undefined && operator === "multiply") {
+        return;
+      } else if (secondNumber === undefined && operator !== "multiply") {
+        let newString = display.textContent.slice(0, -3);
+        display.textContent = newString += ` ${event.key} `;
+        operator = "multiply";
+        return;
+      }
+      firstNumber = operate(firstNumber, operator, secondNumber);
+      console.log(firstNumber, operator, secondNumber);
+    }
+    if (!firstNumber) {
+      return;
+    }
+    operatorAdded++;
+    floatAdded = false; //Removes the floatAdded so it can be added to the second number
+    display.textContent += ` ${event.key} `;
+    operator = "multiply";
+  }
+
+  if(event.key === "/") {
+    if (!firstNumber) {
+    clearAll();
+    display.textContent = "Please enter a number";
+    return;
+  }
+  if (operatorAdded) {
+    if (secondNumber === undefined && operator === "divide") {
+      return;
+    } else if (secondNumber === undefined && operator !== "divide") {
+      let newString = display.textContent.slice(0, -3);
+      display.textContent = newString += ` ${event.key} `;
+      operator = "divide";
+      return;
+    }
+    firstNumber = operate(firstNumber, operator, secondNumber);
+    console.log(firstNumber, operator, secondNumber);
+  }
+  if (!firstNumber) {
+    return;
+  }
+  operatorAdded++;
+  floatAdded = false; //Removes the floatAdded so it can be added to the second number
+  display.textContent += ` ${event.key} `;
+  operator = "divide";
+  }
+
+  if (event.key === "Delete") {
+    clearAll();
+  }
+
   
 });
 
