@@ -139,6 +139,59 @@ function detectNumber(numberButton) {
   //If an operator has been added, we are no longer working with the first number, but instead the second.
 
 }
+
+function detectNumberNumPad(eventKey) {
+  if (resultDisplayed && !operatorAdded) {
+    clearAll();
+  }
+  const number = eventKey;
+  if (floatAdded === true && number === '.') {
+    return;
+  } else {
+    if (operatorAdded && !secondNumber) {
+      if (number === '.' && !floatAdded) {
+        return;
+      }
+      secondNumber = number;
+      display.textContent += number;
+      console.log(`This is #2 ${secondNumber}`);
+    } else if (operatorAdded && secondNumber) {
+      if (number === '.' && !floatAdded) {
+        floatAdded = true;
+        secondNumber += number;
+        display.textContent += number;
+        console.log(`This is #2 ${secondNumber}`);
+      } else {
+        secondNumber += number;
+        display.textContent += number;
+        console.log(`This is #2 ${secondNumber}`);
+      }
+    }
+    if (!operatorAdded && !firstNumber) { //For the first digit in the display
+      if (number === ".") {
+        clearAll();
+        display.textContent = 'Please enter a NUMBER, not a dot.'
+        return;
+      } else {
+        firstNumber = number;
+        console.log(`This is #1 ${firstNumber}`);
+        display.textContent = firstNumber;
+      }
+    } else if (!operatorAdded && !secondNumber) { //For other digits belonging to the first number
+
+      if (number === '.' && !floatAdded) {
+        floatAdded = true;
+        firstNumber += number;
+        display.textContent += number;
+        console.log(`This is #1 x2 ${firstNumber}`);
+      } else {
+        firstNumber += number;
+        display.textContent += number;
+        console.log(`This is #1 x2 ${firstNumber}`);
+      }
+    }
+  }
+}
 //Clears display and resets numbers
 function clearAll() {
   display.textContent = "";
@@ -160,8 +213,116 @@ numberButtons.forEach((button) => {
   });
 });
 
-floatButton.addEventListener('click', () => {
+window.addEventListener('keydown', (event) => {
+  if (
+    event.key === "1" ||
+    event.key === "2" ||
+    event.key === "3" ||
+    event.key === "4" ||
+    event.key === "5" ||
+    event.key === "6" ||
+    event.key === "7" ||
+    event.key === "8" ||
+    event.key === "9" ||
+    event.key === "0" ||
+    event.key === "." ||
+    event.key === "," //Take account for different keyboards
+  ) {
+    if (event.key === ',') {
+      const dot = ".";
+      detectNumberNumPad(dot);
+    } else {
+      detectNumberNumPad(event.key);
+      console.log(event.key);
+    }
+  }
 
+  if (event.key === "Enter") {
+    if (!secondNumber) {
+      return;
+    }
+    operate(firstNumber, operator, secondNumber);
+    console.log(firstNumber, operator, secondNumber, result);
+    if (!result) {
+      clearAll();
+      display.textContent = "You can't divide by 0...";
+      return;
+    }
+    if (!firstNumber && !secondNumber) {
+      clearAll();
+      display.textContent = "Please enter some values";
+    } else {
+      let isInt = (result) => result % 1 === 0;
+      if (!isInt(result)) {
+        display.textContent = parseFloat(result).toFixed(2);
+        console.log("foo");
+        floatAdded = true;
+
+      } else {
+        display.textContent = result;
+        floatAdded = false;
+      }
+      result = 0;
+      resultDisplayed = true;
+      operatorAdded = 0;
+    }
+  }
+
+  if (event.key === "+") {
+    if (!firstNumber) {
+      clearAll();
+      display.textContent = "Please enter a number";
+      return;
+    }
+    if (operatorAdded) {
+      if (secondNumber === undefined && operator === "add") {
+        return;
+      } else if (secondNumber === undefined && operator !== "add") {
+        let newString = display.textContent.slice(0, -3);
+        display.textContent = newString += ` ${event.key} `;
+        operator = "add";
+        return;
+      }
+      firstNumber = operate(firstNumber, operator, secondNumber);
+      console.log(firstNumber, operator, secondNumber);
+    }
+    if (!firstNumber) {
+      return;
+    }
+    operatorAdded++;
+    floatAdded = false; //Removes the floatAdded so it can be added to the second number
+    display.textContent += ` ${event.key} `;
+    operator = "add";
+  }
+
+  if (event.key === "-") {
+    if (!firstNumber) {
+      clearAll();
+      display.textContent = "Please enter a number";
+      return;
+    }
+    if (operatorAdded) {
+      if (secondNumber === undefined && operator === "subtract") {
+        return;
+      } else if (secondNumber === undefined && operator !== "subtract") {
+        let newString = display.textContent.slice(0, -3);
+        display.textContent = newString += ` ${event.key} `;
+        operator = "subtract";
+        return;
+      }
+      firstNumber = operate(firstNumber, operator, secondNumber);
+      console.log(firstNumber, operator, secondNumber);
+    }
+    if (!firstNumber) {
+      return;
+    }
+    operatorAdded++;
+    floatAdded = false; //Removes the floatAdded so it can be added to the second number
+    display.textContent += ` ${event.key} `;
+    operator = "subtract";
+  }
+
+  
 });
 
 
