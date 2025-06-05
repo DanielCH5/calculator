@@ -9,7 +9,7 @@ const divideButton = document.querySelector(".divideButton");
 
 let operatorAdded = 0;
 function add(a, b) {
-  return parseInt(a) + parseInt(b);
+  return Number(a) + Number(b);
 }
 
 function subtract(a, b) {
@@ -228,6 +228,7 @@ divideButton.addEventListener("click", () => {
 });
 
 sumButton.addEventListener("click", () => {
+  operate(firstNumber, operator, secondNumber);
   if (!result) {
     clearAll();
     display.textContent = "You can't divide by 0...";
@@ -240,7 +241,7 @@ sumButton.addEventListener("click", () => {
     if (!secondNumber) {
       return;
     }
-    operate(firstNumber, operator, secondNumber);
+    
     let isInt = (result) => result % 1 === 0;
     if (!isInt(result)) {
       display.textContent = parseFloat(result).toFixed(2);
